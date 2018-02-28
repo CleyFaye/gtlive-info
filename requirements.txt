@@ -1,0 +1,12 @@
+Django<1.12
+psycopg2-binary<2.8
+django-tastypie<0.15
+django-maintenance-mode<1.0
+django-htmlmin<1.0
+django-markdownify<0.3
+django-ft-cache<1.1
+pylibmc<1.6
+Pillow<4.3
+-e git+https://repos.cleyfaye.net/git/WebDeploy#egg=web_deploy
+-e git+https://repos.cleyfaye.net/git/pycaptcha#egg=pycaptcha
+-e git+https://repos.cleyfaye.net/git/django-socialmeta#egg=django-socialmeta
