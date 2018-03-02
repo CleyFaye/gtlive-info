@@ -7,19 +7,31 @@
     background-color: @palHeaderBackgroud;
     background-clip: padding-box;
     min-height: calc(104px - -1em);
-    border-left: 1em solid transparent;
     border-bottom: 1em solid transparent;
-    border-right: 1em solid transparent;
     border-image: url('@{staticPath}img/border.png') 20 round;
 
+    @media @desktop {
+        border-left: 1em solid transparent;
+        border-right: 1em solid transparent;
+    }
+    @media @mobile {
+        margin-left: -1em;
+        margin-right: -1em;
+    }
+
     & > .title {
+        @media @desktop {
+            margin-left: 0.5em;
+            margin-top: 0.2em;
+            float: left;
+        }
+        @media @mobile {
+            text-align: center;
+        }
         font-size: 4em;
         font-family: 'Oswald', sans-serif;
         font-weight: bold;
         letter-spacing: 0.05em;
-        margin-left: 0.5em;
-        margin-top: 0.2em;
-        float: left;
         &, a {
             text-decoration: none;
             color: @palGreenTheory;
@@ -32,12 +44,17 @@
     }
 
     & > .disclaimer {
-        margin-top: 2em;
-        margin-left: 1em;
+        @media @desktop {
+            margin-top: 2em;
+            margin-left: 1em;
+            float: left;
+            font-size: 1.5em;
+        }
+        @media @mobile {
+            text-align: center;
+        }
         color: @palDisclaimerText;
         font-family: 'Droid Sans', sans-serif;
-        font-size: 1.5em;
-        float: left;
         text-shadow: 1px 1px @palDisclaimerBorder,
                      -1px 1px @palDisclaimerBorder,
                      1px -1px @palDisclaimerBorder,

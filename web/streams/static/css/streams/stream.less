@@ -53,12 +53,28 @@ a.ytLink {
         margin-bottom: 1em;
     }
     .squareArt {
-        width: 90%;
+        @media @desktop {
+            width: 90%;
+            margin-left: 5%;
+        }
+        @media @mobile {
+            width: 90px;
+            float: left;
+        }
         height: auto;
-        margin-left: 5%;
     }
     .title {
-        font-size: 2em;
+        @media @desktop {
+            font-size: 2em;
+        }
+        @media @mobile {
+            font-size: 1.4em;
+            &:after {
+                clear: both;
+                display: block;
+                content: "";
+            }
+        }
         text-align: center;
         color: @palStreamTitle;
         text-shadow: 0.2em 0.2em 0.5em @palShadow, 
@@ -76,6 +92,9 @@ a.ytLink {
     .streamStats {
         & > div:not(:last-of-type) {
             border-bottom: 1px solid black;
+        }
+        @media @mobile {
+            margin-top: 1em;
         }
     }
 }

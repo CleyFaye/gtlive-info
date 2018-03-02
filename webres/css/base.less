@@ -8,12 +8,18 @@ body > .container {
     background: url('@{staticPath}img/bg.jpg') repeat;
     background-color: @palBackground;
     color: @palDefaultText;
-    width: 70em;
     background-clip: padding-box;
     border-right: 2em solid transparent;
     border-bottom: 2em solid transparent;
     border-left: 2em solid transparent;
     border-image: url('@{staticPath}img/large_border.jpg') 20 round;
+    @media @desktop {
+        width: 70em;
+    }
+    @media @mobile {
+        margin-left: -1em;
+        margin-right: -1em;
+    }
 }
 
 *[title] {
