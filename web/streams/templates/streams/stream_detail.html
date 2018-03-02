@@ -13,7 +13,11 @@
         </div>
         <div class="col-md-10">
             <div class="title">{% if object.live_title %}{{ object.live_title }}{% else %}-{% endif %}</div>
-            <div class="airTime" title="{{ object.scheduled_date }} in US/Pacific timezone">Aired at&nbsp;: <span class="localtime" data-aired="{{ object.scheduled_date|date:"c" }}">loading...</span> (<span class="timezone">loading...</span> timezone)</div>
+            {% if object.scheduled_date.second == 34 %}
+                <div class="airTime">Aired at &nbsp;: {{ object.scheduled_date.date }}</div>
+            {% else %}
+                <div class="airTime" title="{{ object.scheduled_date }} in US/Pacific timezone">Aired at&nbsp;: <span class="localtime" data-aired="{{ object.scheduled_date|date:"c" }}">loading...</span> (<span class="timezone">loading...</span> timezone)</div>
+            {% endif %}
         </div>
     </div>
     <div class="row">
@@ -36,18 +40,20 @@
     </div>
     <div>
         <h2>Links</h2>
+        <div class="row">
         {% if object.live_yt_ref %}
-            <div>
+            <div class="col-md-3">
                 <h3>Live stream link</h3>
-                {% include "streams/parts/yt_link.html" with ref=object.live_yt_ref text=object.live_title %}
+                {% include "streams/parts/yt_link.html" with ref=object.live_yt_ref text=object.live_title image=object.live_thumbnail %}
             </div>
         {% endif %}
         {% if object.archive_yt_ref %}
-            <div>
+            <div class="col-md-3">
                 <h3>Archive link</h3>
-                {% include "streams/parts/yt_link.html" with ref=object.archive_yt_ref text=object.archive_title %}
+                {% include "streams/parts/yt_link.html" with ref=object.archive_yt_ref text=object.archive_title image=object.archive_thumbnail %}
             </div>
         {% endif %}
+        </div>
         {% if not object.live_yt_ref and not object.archive_yt_ref %}
             <div>No link found for this stream. This usually mean that they got removed (for live streams) or never got registered (for archive links).</div>
         {% endif %}

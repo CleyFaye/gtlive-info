@@ -17,17 +17,20 @@
         {% if previous %}
         <div class="col-md-12 verticalList">
         {% endif %}
+            <div class="row">
             {% if stream.live_yt_ref %}
-                <div class="videoLink">
+                <div class="col-md-3">
                     <h3>Full stream link</h3>
-                    {% include 'streams/parts/yt_link.html' with ref=stream.live_yt_ref text=stream.live_title %}
+                    {% include 'streams/parts/yt_link.html' with ref=stream.live_yt_ref text=stream.live_title image=stream.live_thumbnail %}
                 </div>
             {% endif %}
             {% if stream.archive_yt_ref and previous %}
-                <div class="videoLink">
+                <div class="col-md-3">
                     <h3>Archive video link</h3>
-                    {% include 'streams/parts/yt_link.html' with ref=stream.archive_yt_ref text=stream.archive_title %}
+                    {% include 'streams/parts/yt_link.html' with ref=stream.archive_yt_ref text=stream.archive_title image=stream.archive_thumbnail %}
+                </div>
             {% endif %}
+            </div>
             <div>
                 <h3>Time (in your local timezone&nbsp;: <span class="timezone">loading...</span>)</h3>
                 {% if previous %}

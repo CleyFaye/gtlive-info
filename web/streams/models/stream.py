@@ -6,11 +6,11 @@ from datetime import (
 )
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+from utils.youtube import (getSingleVideoResult,
+                           getThumbnailData)
 from .game import Game
-from streams.fields import (
-    YoutubeVideoReferenceField,
-    TrustLevelField,
-)
+from streams.fields import (YoutubeVideoReferenceField,
+                            TrustLevelField)
 
 
 class Stream(models.Model):
@@ -65,6 +65,13 @@ class Stream(models.Model):
         _('Video reference of the live stream'),
         help_text=_('The Youtube reference code for the live stream.'),
     )
+    live_thumbnail = models.ImageField(
+        _('Thumbnail of the full video'),
+        blank=True,
+        null=True,
+        help_text=_('The thumbnail used on the full stream, on the main '
+                    + 'channel'),
+    )
     archive_title = models.TextField(
         _('Title of the video when uploaded to the archive channel'),
         blank=True,
@@ -74,6 +81,12 @@ class Stream(models.Model):
     archive_yt_ref = YoutubeVideoReferenceField(
         _('Video reference of the archive version'),
         help_text=_('The Youtube reference code for the archive video.'),
+    )
+    archive_thumbnail = models.ImageField(
+        _('Thumbnail of the archive video'),
+        blank=True,
+        null=True,
+        help_text=_('The thumbnail used on the archive video'),
     )
     latepatness = models.IntegerField(
         _('How late was the stream'),
@@ -92,6 +105,37 @@ class Stream(models.Model):
         blank=True,
         help_text=_('(list of) game played on the stream.'),
     )
+
+    def save(self, *args, **kwargs):
+        if self.live_yt_ref:
+            if ((not self.live_title
+                 or not self.live_thumbnail
+                 or not self.duration)):
+                videoDetails = getSingleVideoResult(self.live_yt_ref)
+                if not self.live_title:
+                    self.live_title = videoDetails['title']
+                if not self.live_thumbnail:
+                    thumbnailImage = getThumbnailData(
+                        videoDetails['thumbnail'])
+                    if thumbnailImage:
+                        self.live_thumbnail.save('thumbnail.jpg',
+                                                 thumbnailImage)
+                if not self.duration:
+                    self.duration = videoDetails['duration']
+        if self.archive_yt_ref:
+            if ((not self.archive_title
+                 or not self.archive_thumbnail)):
+                videoDetails = getSingleVideoResult(self.archive_yt_ref)
+                if not self.archive_title:
+                    self.archive_title = videoDetails['title']
+                if not self.archive_thumbnail:
+                    thumbnailImage = getThumbnailData(
+                        videoDetails['thumbnail'])
+                    if thumbnailImage:
+                        self.archive_thumbnail.save('thumbnail.jpg',
+                                                    thumbnailImage)
+        super().save(*args,
+                     **kwargs)
 
     @classmethod
     def get_next_stream(cls, hoursMargin=3):

@@ -1,6 +1,29 @@
 @import "palette";
 @import "media";
 
+a.ytLink {
+    display: block;
+    &.ytLink-img {
+        & > img {
+            width: 140px;
+            height: auto;
+            border: 1px solid @palGreenTheory;
+            border-radius: 10%;
+        }
+        width: 140px;
+        & > span {
+            display: block;
+            text-align: center;
+            font-size: 0.9em;
+        }
+    }
+    &:not(.ytLink-img) {
+        & > span {
+            font-size: 1.6em;
+        }
+    }
+}
+
 .streamBox, .streamDetails {
     .gameDescription {
         font-size: 0.9em;
@@ -22,24 +45,6 @@
         height: 100px;
         display: block;
         background-color: rgba(50, 50, 50, 0.5);
-    }
-
-    .videoLink {
-        a {
-            font-size: 1.6em;
-            display: block;
-        }
-
-        .desktopLink {
-            @media @mobile {
-                display: none;
-            }
-        }
-        .mobileLink {
-            @media @desktop {
-                display: none;
-            }
-        }
     }
 }
 

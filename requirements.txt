@@ -8,6 +8,7 @@ django-markdownify<0.3
 django-ft-cache<1.1
 pylibmc<1.6
 Pillow<4.3
+simplejson
 -e git+https://repos.cleyfaye.net/git/WebDeploy#egg=web_deploy
 -e git+https://repos.cleyfaye.net/git/pycaptcha#egg=pycaptcha
 -e git+https://repos.cleyfaye.net/git/django-socialmeta#egg=django-socialmeta
