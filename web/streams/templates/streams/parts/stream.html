@@ -1,0 +1,65 @@
+{% load static %}
+{% load cache %}
+{% cache 60 stream_box stream.pk previous %}
+<div class="box streamBox">
+    <h1>{{ title }}</h1>
+    <div class="row">
+        {% if not previous %}
+        <div class="col-md-2">
+            <h2>Trust level&nbsp;:</h2>
+            {% with "img/streams/trust/"|add:stream.trust_level|add:'.png' as image_path %}
+                <img class="trust" src="{% static image_path %}" width="100" height="100" title="The current trust level of this page" />
+            {% endwith %}
+            <p>{{ stream.get_trust_level_display }}</p>
+        </div>
+        <div class="col-md-10 verticalList">
+        {% endif %}
+        {% if previous %}
+        <div class="col-md-12 verticalList">
+        {% endif %}
+            {% if stream.live_yt_ref %}
+                <div class="videoLink">
+                    <h3>Full stream link</h3>
+                    {% include 'streams/parts/yt_link.html' with ref=stream.live_yt_ref text=stream.live_title %}
+                </div>
+            {% endif %}
+            {% if stream.archive_yt_ref and previous %}
+                <div class="videoLink">
+                    <h3>Archive video link</h3>
+                    {% include 'streams/parts/yt_link.html' with ref=stream.archive_yt_ref text=stream.archive_title %}
+            {% endif %}
+            <div>
+                <h3>Time (in your local timezone&nbsp;: <span class="timezone">loading...</span>)</h3>
+                {% if previous %}
+                    <span class="localtime" data-aired="{{ stream.scheduled_date|date:"c" }}">loading...</span>
+                {% else %}
+                    <span class="localtime" data-scheduled="{{ stream.scheduled_date|date:"c" }}">loading...</span>
+                {% endif %}
+            </div>
+            <div>
+                <h3>Time (in the US/Pacific timezone)</h3>
+                {{ stream.scheduled_date }}
+            </div>
+            {% if stream.games.all %}
+                <div>
+                    {% include 'streams/parts/games_list.html' with games=stream.games %}
+                </div>
+            {% endif %}
+            {% if stream.source and not previous %}
+                <div>
+                    <h3>Source</h3>
+                    {{ stream.source }}
+                    {% if stream.source_url %}
+                        <a href="{{ stream.source_url }}">(ref.)</a>
+                    {% endif %}
+                </div>
+            {% endif %}
+            {% if previous %}
+                <div>
+                    <a href="{% url "streams:details" pk=stream.pk %}">Go to this stream details</a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endcache %}

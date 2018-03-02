@@ -1,0 +1,16 @@
+{
+    "source": {
+        "type": "git",
+        "url": "https://github.com/Eonasdan/bootstrap-datetimepicker.git",
+        "tag": "v4.17.45"
+    },
+    "prefix": "datetime",
+    "files": {
+        "css": {
+            "build/css/bootstrap-datetimepicker.min.css": "datetimepicker.css"
+        },
+        "js": {
+            "build/js/bootstrap-datetimepicker.min.js": "datetimepicker.js"
+        }
+    }
+}

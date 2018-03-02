@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% load cache %}
+
+{% block head %}
+{{ block.super }}
+{% cache 3600 streams_head %}
+{% include 'streams/inc/streams.html' %}
+{% endcache %}
+{% endblock %}
+
+{% block content %}
+{% block streams_content %}
+{% endblock %}
+{% endblock %}

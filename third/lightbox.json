@@ -1,0 +1,16 @@
+{
+    "source": {
+        "type": "git",
+        "url": "https://github.com/ashleydw/lightbox.git",
+        "tag": "v5.1.1"
+    },
+    "prefix": "lightbox",
+    "files": {
+        "css": {
+            "dist/ekko-lightbox.min.css": "lightbox.css"
+        },
+        "js": {
+            "dist/ekko-lightbox.min.js": "lightbox.js"
+        }
+    }
+}

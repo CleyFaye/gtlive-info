@@ -1,0 +1,11 @@
+{% load jscss %}
+{% if view_js %}
+    {% for jsname in view_js %}
+        {% js jsname %}
+    {% endfor %}
+{% endif %}
+{% if view_css %}
+    {% for cssname in view_css %}
+        {% css cssname %}
+    {% endfor %}
+{% endif %}

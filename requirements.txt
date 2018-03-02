@@ -1,4 +1,5 @@
 Django<1.12
+pytz
 psycopg2-binary<2.8
 django-tastypie<0.15
 django-maintenance-mode<1.0

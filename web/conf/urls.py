@@ -2,7 +2,7 @@
 from django.conf.urls import (url,
                               include)
 from django.contrib import admin
-from django.http import HttpResponseRedirect
+from streams.views import NextStreamView
 
 urlpatterns = ([
     url(r'^admin/',
@@ -10,8 +10,10 @@ urlpatterns = ([
     url(r'^maintenance/',
         include('maintenance_mode.urls')),
     url(r'^$',
-        lambda r: HttpResponseRedirect('streams/'),
+        NextStreamView.as_view(),
         name='homepage'),
     url(r'^streams/',
-        include('streams.urls')),
+        include('streams.urls',
+                namespace='streams'),
+        )
 ])

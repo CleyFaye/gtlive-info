@@ -1,0 +1,13 @@
+{
+    "source": {
+        "type": "git",
+        "url": "https://github.com/moment/moment.git",
+        "tag": "2.18.1"
+    },
+    "prefix": "moment",
+    "files": {
+        "js": {
+            "min/moment-with-locales.min.js": "moment.js"
+        }
+    }
+}

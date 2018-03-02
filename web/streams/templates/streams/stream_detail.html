@@ -1,0 +1,57 @@
+{% extends "streams/base.html" %}
+{% load cache %}
+{% load static %}
+{% load human %}
+
+{% block streams_content %}
+{% cache 3600 object %}
+<div class="box streamDetails">
+    <h1>Stream details</h1>
+    <div class="row">
+        <div class="col-md-2">
+            <img class="squareArt" width="120" height="120" src="{% if object.square_art %}{{ object.square_art.url }}{% else %}{% static 'img/streams/nosquare.jpg' %}{% endif %}" alt="Square blackboard" />
+        </div>
+        <div class="col-md-10">
+            <div class="title">{% if object.live_title %}{{ object.live_title }}{% else %}-{% endif %}</div>
+            <div class="airTime" title="{{ object.scheduled_date }} in US/Pacific timezone">Aired at&nbsp;: <span class="localtime" data-aired="{{ object.scheduled_date|date:"c" }}">loading...</span> (<span class="timezone">loading...</span> timezone)</div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-9 gameListHolder">
+            {% include 'streams/parts/games_list.html' with games=object.games header_tag="h2" %}
+        </div>
+        <div class="col-md-3 streamStats">
+            <h2>Stream statistics</h2>
+            {% if object.latepatness is not None %}
+            <div>
+                <h3>Latepat-ness</h3> <span>{{ object.latepatness|humanDuration }} minutes</span>
+            </div>
+            {% endif %}
+            {% if object.duration %}
+            <div>
+                <h3>Duration</h3> <span>{{ object.duration|humanDuration }}</span>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    <div>
+        <h2>Links</h2>
+        {% if object.live_yt_ref %}
+            <div>
+                <h3>Live stream link</h3>
+                {% include "streams/parts/yt_link.html" with ref=object.live_yt_ref text=object.live_title %}
+            </div>
+        {% endif %}
+        {% if object.archive_yt_ref %}
+            <div>
+                <h3>Archive link</h3>
+                {% include "streams/parts/yt_link.html" with ref=object.archive_yt_ref text=object.archive_title %}
+            </div>
+        {% endif %}
+        {% if not object.live_yt_ref and not object.archive_yt_ref %}
+            <div>No link found for this stream. This usually mean that they got removed (for live streams) or never got registered (for archive links).</div>
+        {% endif %}
+    </div>
+</div>
+{% endcache %}
+{% endblock %}

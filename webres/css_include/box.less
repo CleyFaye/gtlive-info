@@ -1,0 +1,47 @@
+@import "palette";
+@import "media";
+@import "paths";
+
+div.box {
+    border: 1px solid black;
+    color: @palBoxText;
+    font-family: 'Open Sans', sans-serif;
+    background-color: @palBoxBackground;
+    padding: 0.5em;
+    display: block;
+    width: 100%;
+    margin-top: 1em;
+
+    & h1 {
+        font-family: 'Droid Sans', sans-serif;
+        margin-top: 0px;
+    }
+
+    & h2 {
+        font-family: 'Droid Sans', sans-serif;
+        margin-top: 0px;
+        font-size: 1.5em;
+    }
+
+    & h3 {
+        font-family: 'Droid Sans', sans-serif;
+        margin: 0px;
+        font-size: 1em;
+        font-weight: bold;
+        display: inline;
+        &:after {
+            display: inline;
+            content: "\00a0:";
+            margin-right: 0.4em;
+        }
+    }
+
+    & div.verticalList {
+        & > div {
+            &:not(:last-child) {
+                border-bottom: 1px solid gray;
+            }
+            padding: 0.3em;
+        }
+    }
+}

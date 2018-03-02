@@ -1,0 +1,12 @@
+{% extends "streams/base.html" %}
+{% load cache %}
+
+{% block streams_content %}
+<div class="box">
+    <h1>Next stream is… mysterious</h1>
+    <p>It seems that the next stream isn't yet in my database. This can mean two things&nbsp;: the webmaster is asleep and will fix this in a few hours, or there are no informations at all about the next stream. Stay tuned!</p>
+</div>
+{% if previous_stream %}
+{% include "streams/parts/stream.html" with title="Previous stream" stream=previous_stream previous=True %}
+{% endif %}
+{% endblock %}

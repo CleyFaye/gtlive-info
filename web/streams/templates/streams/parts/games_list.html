@@ -1,0 +1,30 @@
+{% if games.all.count > 1 %}
+    {% for game in games.all %}
+        {% if forloop.first %}
+            {% if header_tag %}
+                <{{ header_tag }}>Games</{{ header_tag }}>
+            {% else %}
+                <h3>Games</h3>
+            {% endif %}
+            <ul>
+        {% endif %}
+        <li>{% include 'streams/parts/game_link.html' %}</li>
+        {% if forloop.last %}
+            </ul>
+        {% endif %}
+    {% endfor %}
+{% else %}
+    {% for game in games.all %}
+        {% if header_tag %}
+            <{{ header_tag }}>Game</{{ header_tag }}>
+        {% else %}
+            <h3>Game</h3>
+        {% endif %}
+        {% include 'streams/parts/game_link.html' %}
+        {% if game.description %}
+            <div class="gameDescription">
+                {{ game.description }}
+            </div>
+        {% endif %}
+    {% endfor %}
+{% endif %}

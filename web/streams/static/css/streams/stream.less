@@ -1,0 +1,76 @@
+@import "palette";
+@import "media";
+
+.streamBox, .streamDetails {
+    .gameDescription {
+        font-size: 0.9em;
+        margin-left: 1em;
+        margin-right: 1em;
+        background: rgba(0, 0, 0, 0.1);
+    }
+}
+
+.streamBox {
+    .localtime {
+        font-size: 1.8em;
+        display: block;
+        font-weight: bold;
+    }
+
+    .trust {
+        width: 100px;
+        height: 100px;
+        display: block;
+        background-color: rgba(50, 50, 50, 0.5);
+    }
+
+    .videoLink {
+        a {
+            font-size: 1.6em;
+            display: block;
+        }
+
+        .desktopLink {
+            @media @mobile {
+                display: none;
+            }
+        }
+        .mobileLink {
+            @media @desktop {
+                display: none;
+            }
+        }
+    }
+}
+
+.streamDetails {
+    & > div:not(:last-of-type) {
+        margin-bottom: 1em;
+    }
+    .squareArt {
+        width: 90%;
+        height: auto;
+        margin-left: 5%;
+    }
+    .title {
+        font-size: 2em;
+        text-align: center;
+        color: @palStreamTitle;
+        text-shadow: 0.2em 0.2em 0.5em @palShadow, 
+                     1px 1px 1px @palStreamTitleBorder,
+                     1px -1px 1px @palStreamTitleBorder,
+                     -1px 1px 1px @palStreamTitleBorder,
+                     -1px -1px 1px @palStreamTitleBorder;
+        background: rgba(255, 255, 255, 0.4);
+    }
+    .airTime {
+        margin-top: 0.2em;
+        font-size: 1.1em;
+        text-align: center;
+    }
+    .streamStats {
+        & > div:not(:last-of-type) {
+            border-bottom: 1px solid black;
+        }
+    }
+}

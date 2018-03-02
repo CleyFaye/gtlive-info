@@ -1,0 +1,23 @@
+{% extends "core.html" %}
+{% load cache %}
+
+{% block head %}
+    {{ block.super }}
+    {% cache 3600 base_head %}
+        {% include 'inc/favicon.html' %}
+        {% include 'inc/viewmedia.html' %}
+        {% include 'inc/formmedia.html' %}
+        {% include 'inc/base.html' %}
+    {% endcache %}
+    {% include 'socialmeta/head.html' %}
+{% endblock %}
+
+{% block core_body %}
+<div class="container">
+    {% include 'parts/header.html' %}
+    {% block content %}
+    <p>☹</p>
+    {% endblock %}
+    {% include 'parts/footer.html' %}
+</div>
+{% endblock %}

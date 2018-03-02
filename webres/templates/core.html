@@ -1,0 +1,25 @@
+{% load cache %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>{% block html_title %}GTLive Unofficial Schedule{% endblock %}</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        {% block head %}
+            {% cache 3600 core_head %}
+                {% include 'inc/jquery.html' %}
+                {% include 'inc/bootstrap.html' %}
+                {% include 'inc/analytics.html' %}
+                {% include 'inc/fonts.html' %}
+            {% endcache %}
+        {% endblock %}
+    </head>
+    <body>
+        {% block core_body %}
+            <div class="container">
+                <p>Something very, very wrong happened.</p>
+            </div>
+        {% endblock %}
+    </body>
+</html>

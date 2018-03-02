@@ -5,14 +5,17 @@ Configuration that applies to any deployment environment (project-specific).
 from django.utils.translation import ugettext_lazy as _
 from settings import BASE_DIR
 from os.path import join
+from utils import generate_random_tag
 
 WSGI_APPLICATION = 'wsgi.application'
 ROOT_URLCONF = 'conf.urls'
 
 LANGUAGE_CODE = 'en-us'
-TIME_ZONE = 'Europe/Paris'
+TIME_ZONE = 'US/Pacific'
+USE_TZ = True
 
 PROJECT_APPS = [
+    'utils',
     'streams.StreamsConfig',
 ]
 
@@ -68,6 +71,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'maintenance_mode.context_processors.maintenance_mode',
                 'socialmeta.context_processors.socialmeta',
+                'utils.context_processors.googleanalytics',
             ],
             },
     },
@@ -81,6 +85,8 @@ STATIC_ROOT = join(BASE_DIR,
 STATIC_URL = '/s/'
 STATICFILES_DIRS = [join(BASE_DIR,
                          'webres')]
+
+STATIC_VERSION = generate_random_tag(6)
 
 SOCIALMETA = {
     'enabled': True,

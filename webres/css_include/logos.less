@@ -1,0 +1,17 @@
+@import "media";
+@import "paths";
+.header {
+    & > .logo-live {
+        width: 124px;
+        height: 104px;
+        display: block;
+        @media @desktop {
+            float: right;
+        }
+        @media @mobile {
+            display: none;
+        }
+        background: transparent url("@{staticPath}img/logo.png") no-repeat top left;
+        background-size: 124px;
+    }
+}

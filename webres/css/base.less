@@ -1,0 +1,29 @@
+@import "logos";
+@import "htmltags";
+@import "media";
+@import "palette";
+@import "paths";
+
+body > .container {
+    background: url('@{staticPath}img/bg.jpg') repeat;
+    background-color: @palBackground;
+    color: @palDefaultText;
+    width: 70em;
+    background-clip: padding-box;
+    border-right: 2em solid transparent;
+    border-bottom: 2em solid transparent;
+    border-left: 2em solid transparent;
+    border-image: url('@{staticPath}img/large_border.jpg') 20 round;
+}
+
+*[title] {
+    &:not(img) {
+        cursor: help;
+    }
+}
+
+@import "header";
+@import "footer";
+
+// Box
+@import "box";
