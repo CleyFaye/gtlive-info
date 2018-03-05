@@ -14,6 +14,9 @@ from streams.fields import (YoutubeVideoReferenceField,
 
 
 class Stream(models.Model):
+    class Meta:
+        ordering = ['-scheduled_date']
+
     scheduled_date = models.DateTimeField(
         _('Scheduled streaming date and time'),
         blank=True,
@@ -52,6 +55,8 @@ class Stream(models.Model):
     )
     trust_level = TrustLevelField(
         _('Level of confidence for this schedule'),
+        blank=True,
+        null=True,
         help_text=_('How much can this information be trusted.'),
     )
     live_title = models.TextField(
@@ -136,6 +141,34 @@ class Stream(models.Model):
                                                     thumbnailImage)
         super().save(*args,
                      **kwargs)
+
+    @property
+    def next_stream(self):
+        try:
+            return self._cached_next_stream
+        except AttributeError:
+            try:
+                self._cached_next_stream = (
+                    Stream.objects
+                    .filter(scheduled_date__gt=self.scheduled_date)
+                    .order_by('scheduled_date'))[0]
+            except IndexError:
+                self._cached_next_stream = None
+        return self.next_stream
+
+    @property
+    def previous_stream(self):
+        try:
+            return self._cached_previous_stream
+        except AttributeError:
+            try:
+                self._cached_previous_stream = (
+                    Stream.objects
+                    .filter(scheduled_date__lt=self.scheduled_date)
+                    .order_by('-scheduled_date'))[0]
+            except IndexError:
+                self._cached_previous_stream = None
+        return self.previous_stream
 
     @classmethod
     def get_next_stream(cls, hoursMargin=3):

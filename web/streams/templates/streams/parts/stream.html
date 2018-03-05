@@ -6,11 +6,13 @@
     <div class="row">
         {% if not previous %}
         <div class="col-md-2">
-            <h2>Trust level&nbsp;:</h2>
-            {% with "img/streams/trust/"|add:stream.trust_level|add:'.png' as image_path %}
-                <img class="trust" src="{% static image_path %}" width="100" height="100" title="The current trust level of this page" />
-            {% endwith %}
-            <p>{{ stream.get_trust_level_display }}</p>
+            {% if stream.trust_level %}
+                <h2>Trust level&nbsp;:</h2>
+                {% with "img/streams/trust/"|add:stream.trust_level|add:'.png' as image_path %}
+                    <img class="trust" src="{% static image_path %}" width="100" height="100" title="The current trust level of this page" />
+                {% endwith %}
+                <p>{{ stream.get_trust_level_display }}</p>
+            {% endif %}
         </div>
         <div class="col-md-10 verticalList">
         {% endif %}

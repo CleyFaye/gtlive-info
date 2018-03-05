@@ -5,6 +5,20 @@
 
 {% block streams_content %}
 {% cache 3600 object %}
+<nav aria-label="Navigate the streams archive">
+    <ul class="pager">
+        {% if object.previous_stream %}
+            <li class="previous"><a href="{% url "streams:details" pk=object.previous_stream.pk %}">Previous</a></li>
+        {% else %}
+            <li class="previous disabled"><a href="#">Previous</a></li>
+        {% endif %}
+        {% if object.next_stream %}
+            <li class="next"><a href="{% url "streams:details" pk=object.next_stream.pk %}">Next</a></li>
+        {% else %}
+            <li class="next disabled"><a href="#">Next</a></li>
+        {% endif %}
+    </ul>
+</nav>
 <div class="box streamDetails">
     <h1>Stream details</h1>
     <div class="row">

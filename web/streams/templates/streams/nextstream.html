@@ -1,8 +1,17 @@
 {% extends "streams/base.html" %}
 
 {% block streams_content %}
-{% include "streams/parts/stream.html" with title="Next stream is…" stream=object previous=False %}
-{% if previous_stream %}
-{% include "streams/parts/stream.html" with title="Previous stream" stream=previous_stream previous=True %}
-{% endif %}
+    {% include "streams/parts/stream.html" with title="Next stream is…" stream=object previous=False %}
+    {% if previous_stream %}
+        <div class="row">
+            <div class="col-md-8">
+                {% include "streams/parts/stream.html" with title="Previous stream" stream=previous_stream previous=True %}
+            </div>
+            <div class="col-md-4">
+                {% include "parts/links.html" %}
+            </div>
+        </div>
+    {% else %}
+        {% include "parts/links.html" %}
+    {% endif %}
 {% endblock %}

@@ -5,6 +5,9 @@ from streams.fields import ActivityTypeField
 
 
 class Game(models.Model):
+    class Meta:
+        ordering = ['name']
+
     name = models.CharField(
         _('Name of the game/activity'),
         max_length=200,
@@ -32,3 +35,6 @@ class Game(models.Model):
         help_text=_('True if the game was completed live, False if it wasn\'t. '
                     + 'None if the game isn\'t "completable"'),
     )
+
+    def __str__(self):
+        return self.name
