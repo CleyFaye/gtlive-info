@@ -2,8 +2,8 @@
 @import "media";
 
 a.ytLink {
-    display: block;
     &.ytLink-img {
+        display: inline-block;
         & > img {
             width: 140px;
             height: auto;
@@ -15,11 +15,6 @@ a.ytLink {
             display: block;
             text-align: center;
             font-size: 0.9em;
-        }
-    }
-    &:not(.ytLink-img) {
-        & > span {
-            font-size: 1.6em;
         }
     }
 }

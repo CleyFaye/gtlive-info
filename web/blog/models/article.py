@@ -42,14 +42,24 @@ class Article(models.Model):
     )
 
     @classmethod
-    def published_articles(cls):
-        """Return a queryset will all published articles"""
+    def published_articles(cls, queryset=None):
+        """Return a queryset will all published articles.
+
+        Parameters
+        ----------
+        queryset : QuerySet | None
+            If provided, this queryset will be filtered to include only
+            published articles.
+            If None, all Article will be filtered.
+        """
         now = get_now()
         filter_future = Q(publication_date__lte=now)
         filter_expired = (Q(expiration_date__isnull=True)
                           | Q(expiration_date__gt=now))
-        return cls.objects.filter(filter_future,
-                                  filter_expired)
+        if queryset is None:
+            queryset = cls.objects
+        return queryset.filter(filter_future,
+                               filter_expired)
 
     @classmethod
     def last_article(clz):

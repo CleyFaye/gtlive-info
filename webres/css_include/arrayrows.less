@@ -1,0 +1,21 @@
+@import "palette";
+
+.arrayrows {
+    & .row:first-of-type {
+        & > div {
+            font-size: 1.5em;
+        }
+        border-bottom: 2px solid black;
+    }
+    text-align: center;
+    & .row:not(:first-of-type) {
+        padding-bottom: 0.25em;
+        padding-top: 0.25em;
+        &:nth-child(odd) {
+            background: @palArrayOddBackground;
+        }
+        &:nth-child(even) {
+            background: @palArrayEvenBackground;
+        }
+    }
+}
