@@ -1,0 +1,18 @@
+{% load markdownify %}
+<div class="box blogArticle">
+    {% if article.title %}
+    <h1>{{ article.title }}</h1>
+    {% endif %}
+    <div class="date">On {{ article.publication_date }}</div>
+    <div class="content">
+        {{ article.content|markdownify }}
+    </div>
+    <div class="author">
+        {% if article.author.twitter %}
+            <a href="https://www.twitter.com/{{ article.author.twitter }}">@{{ article.author.name }}</a>
+        {% else %}
+            {{ article.author.name }}
+        {% endif %}
+    </div>
+</div>
+

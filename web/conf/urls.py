@@ -15,5 +15,9 @@ urlpatterns = ([
     url(r'^streams/',
         include('streams.urls',
                 namespace='streams'),
-        )
+        ),
+    url(r'^blog/',
+        include('blog.urls',
+                namespace='blog'),
+        ),
 ])

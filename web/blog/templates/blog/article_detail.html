@@ -1,0 +1,8 @@
+{% extends "blog/base.html" %}
+{% load cache %}
+
+{% block blog_content %}
+{% cache 3600 object %}
+{% include "blog/parts/article.html" with article=object %}
+{% endcache %}
+{% endblock %}

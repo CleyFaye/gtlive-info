@@ -1,11 +1,8 @@
 """Stream details"""
-from datetime import (
-    datetime,
-    timezone,
-    timedelta,
-)
+from datetime import timedelta
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+from utils import get_now
 from utils.youtube import (getSingleVideoResult,
                            getThumbnailData)
 from .game import Game
@@ -185,7 +182,7 @@ class Stream(models.Model):
         Stream
             A Stream instance, or None if no such stream is presnet in the DB.
         """
-        right_now = datetime.utcnow().replace(tzinfo=timezone.utc)
+        right_now = get_now()
         hours_offset = timedelta(hours=-hoursMargin)
         right_before = right_now + hours_offset
         try:

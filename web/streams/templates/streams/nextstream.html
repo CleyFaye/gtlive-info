@@ -8,10 +8,12 @@
                 {% include "streams/parts/stream.html" with title="Previous stream" stream=previous_stream previous=True %}
             </div>
             <div class="col-md-4">
+                {% include "blog/parts/headline.html" with article=last_article %}
                 {% include "parts/links.html" %}
             </div>
         </div>
     {% else %}
+        {% include "blog/parts/headline.html" with article=last_article %}
         {% include "parts/links.html" %}
     {% endif %}
 {% endblock %}

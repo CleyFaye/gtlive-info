@@ -1,0 +1,10 @@
+{% extends "blog/base.html" %}
+{% load markdownify %}
+
+{% block blog_content %}
+{% include "blog/parts/pagination.html" %}
+{% for article in object_list %}
+{% include "blog/parts/article.html" %}
+{% endfor %}
+{% include "blog/parts/pagination.html" %}
+{% endblock %}

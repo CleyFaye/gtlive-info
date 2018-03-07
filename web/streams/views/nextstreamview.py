@@ -4,6 +4,7 @@ from django.shortcuts import redirect
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
 from django.views.generic.detail import DetailView
+from blog.models import Article
 from streams.models import Stream
 
 
@@ -43,4 +44,5 @@ class NextStreamView(DetailView):
         context = super().get_context_data(*args,
                                            **kwargs)
         context['previous_stream'] = Stream.get_previous_stream(3)
+        context['last_article'] = Article.last_article()
         return context

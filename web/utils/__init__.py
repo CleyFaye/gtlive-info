@@ -1,4 +1,6 @@
 from random import random
+from datetime import (datetime,
+                      timezone)
 
 
 def generate_random_tag(length):
@@ -29,3 +31,8 @@ def generate_random_tag(length):
                       + 'ABCDEFGHJKMNPQRSTUVWXYZ')
     return ''.join([characters_set[int(random() * len(characters_set))]
                     for _ in range(length)])
+
+
+def get_now():
+    """Return the current UTC time"""
+    return datetime.utcnow().replace(tzinfo=timezone.utc)

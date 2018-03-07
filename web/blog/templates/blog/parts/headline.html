@@ -1,0 +1,15 @@
+{% load markdownify %}
+{% if article %}
+    <div class="box headline">
+        <h1>Site updates</h1>
+        {% if article.title %}
+        <h2><a href="{% url "blog:article" pk=article.pk %}">{{ article.title }}</a></h2>
+        {% else %}
+        <h2><a href="{% url "blog:article" pk=article.pk %}">Article</a></h2>
+        {% endif %}
+        <div class="date">On {{ article.publication_date }}</div>
+        <div class="content">
+            {{ article.content|markdownify|truncatewords_html:10 }}
+        </div>
+    </div>
+{% endif %}

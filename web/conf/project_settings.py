@@ -16,6 +16,7 @@ USE_TZ = True
 
 PROJECT_APPS = [
     'utils',
+    'blog.BlogConfig',
     'streams.StreamsConfig',
 ]
 
