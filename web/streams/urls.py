@@ -3,7 +3,8 @@ from django.conf.urls import url
 from django.views.generic import TemplateView
 from .views import (NextStreamView,
                     NoStreamView,
-                    StreamDetailView)
+                    StreamDetailView,
+                    StreamListView)
 
 urlpatterns = [
     url(r'^$',
@@ -15,6 +16,9 @@ urlpatterns = [
     url(r'^nope$',
         NoStreamView.as_view(),
         name='noschedule'),
+    url(r'^list$',
+        StreamListView.as_view(),
+        name='list'),
     url(r'^(?P<pk>\d+)/$',
         StreamDetailView.as_view(),
         name='details'),

@@ -1,0 +1,49 @@
+{% extends "streams/base.html" %}
+
+{% block streams_content %}
+<h1>Previous streams list</h1>
+{% include "parts/pagination.html" %}
+<div class="arrayrows">
+    {% for stream in object_list %}
+        {% if forloop.first %}
+        <div class="row tableHeader">
+            <div class="col-md-3">
+                Local time
+            </div>
+            <div class="col-md-4">
+                Title
+            </div>
+            <div class="col-md-3">
+                Game
+            </div>
+            <div class="col-md-2">
+                Direct links
+            </div>
+        </div>
+        {% endif %}
+        <div class="row streamRow">
+            <div class="col-md-3 localtime" title="{{ stream.scheduled_date }}" data-aired="{{ stream.scheduled_date|date:"c" }}">loading…</div>
+            <div class="col-md-4 title"><a href="{% url 'streams:details' pk=stream.pk %}">{% if stream.live_title %}{{ stream.live_title }}{% else %}{% if stream.archive_title %}{{ stream.archive_title }}{% else %}(no title){% endif %}{% endif %}</a></div>
+            <div class="col-md-3 game">
+                {% if stream.games.all.count > 1 %}
+                    (multiple)
+                {% else %}
+                    {{ stream.games.all.0 }}
+                {% endif %}
+            </div>
+            <div class="col-md-2 links">
+                {% if stream.live_yt_ref %}
+                    {% include 'streams/parts/yt_link.html' with ref=stream.live_yt_ref text="Live" %}
+                {% endif %}
+                {% if stream.live_yt_ref and stream.archive_yt_ref %}
+                    &nbsp;|&nbsp;
+                {% endif %}
+                {% if stream.archive_yt_ref %}
+                    {% include 'streams/parts/yt_link.html' with ref=stream.archive_yt_ref text="Archive" %}
+                {% endif %}
+            </div>
+        </div>
+    {% endfor %}
+</div>
+{% include "parts/pagination.html" %}
+{% endblock %}
