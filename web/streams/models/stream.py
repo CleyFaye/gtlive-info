@@ -18,6 +18,7 @@ class Stream(models.Model):
         _('Scheduled streaming date and time'),
         blank=True,
         null=True,
+        unique=True,
         help_text=_('The expected streaming date, or if changed afterward, '
                     + 'the actual streaming date.'),
     )

@@ -10,6 +10,7 @@ class Game(models.Model):
 
     name = models.CharField(
         _('Name of the game/activity'),
+        unique=True,
         max_length=200,
         help_text=_('The name of the game or activity performed on the stream'),
     )
