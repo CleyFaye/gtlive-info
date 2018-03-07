@@ -21,8 +21,7 @@ class ArticleAdmin(admin.ModelAdmin):
 
 
 class AuthorAdmin(admin.ModelAdmin):
-    list_display = ('user',
-                    'name')
+    list_display = ('name',)
 
 
 admin.site.register(Article,
