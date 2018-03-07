@@ -146,7 +146,7 @@ class Stream(models.Model):
         except AttributeError:
             try:
                 self._cached_next_stream = (
-                    Stream.objects
+                    Stream.past_streams()
                     .filter(scheduled_date__gt=self.scheduled_date)
                     .order_by('scheduled_date'))[0]
             except IndexError:
@@ -166,6 +166,11 @@ class Stream(models.Model):
             except IndexError:
                 self._cached_previous_stream = None
         return self.previous_stream
+
+    @classmethod
+    def past_streams(cls):
+        right_now = get_now()
+        return cls.objects.filter(scheduled_date__lt=right_now)
 
     @classmethod
     def get_next_stream(cls, hoursMargin=3):
