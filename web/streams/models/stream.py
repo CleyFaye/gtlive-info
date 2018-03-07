@@ -215,8 +215,12 @@ class Stream(models.Model):
         """
         next_stream = cls.get_next_stream(hoursMargin)
         try:
-            return (cls.objects
-                    .filter(scheduled_date__lt=next_stream.scheduled_date)
-                    .order_by('-scheduled_date')[0])
+            if next_stream:
+                return (cls.objects
+                        .filter(scheduled_date__lt=next_stream.scheduled_date)
+                        .order_by('-scheduled_date')[0])
+            else:
+                return (cls.objects
+                        .order_by('-scheduled_date')[0])
         except IndexError:
             return None
