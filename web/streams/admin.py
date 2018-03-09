@@ -32,6 +32,8 @@ class StreamAdmin(admin.ModelAdmin):
               'duration',
               'archive_title',
               'archive_thumbnail')
+    filter_horizontal = ('games',)
+    list_filter = ('games',)
 
 
 admin.site.register(Game,
