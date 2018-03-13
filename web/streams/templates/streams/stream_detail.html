@@ -29,7 +29,7 @@
             <img class="squareArt" width="120" height="120" src="{% if object.square_art %}{{ object.square_art.url }}{% else %}{% static 'img/streams/nosquare.jpg' %}{% endif %}" alt="Square blackboard" />
         </div>
         <div class="col-md-10">
-            <div class="title">{% if object.live_title %}{{ object.live_title }}{% else %}-{% endif %}</div>
+            <div class="title">{{ object.display_title }}</div>
             {% if object.scheduled_date.second == 34 %}
                 <div class="airTime">Aired at &nbsp;: {{ object.scheduled_date.date }}</div>
             {% else %}
@@ -48,9 +48,9 @@
                 <h3>Latepat-ness</h3> <span>{{ object.latepatness|humanDuration }}</span>
             </div>
             {% endif %}
-            {% if object.duration %}
+            {% if object.live_video.duration %}
             <div>
-                <h3>Duration</h3> <span>{{ object.duration|humanDuration }}</span>
+                <h3>Duration</h3> <span>{{ object.live_video.duration|humanDuration }}</span>
             </div>
             {% endif %}
         </div>
@@ -58,20 +58,22 @@
     <div>
         <h2>Links</h2>
         <div class="row">
-        {% if object.live_yt_ref %}
+        {% if object.live_video %}
             <div class="col-md-3">
                 <h3>Live stream link</h3>
-                {% include "streams/parts/yt_link.html" with ref=object.live_yt_ref text=object.live_title image=object.live_thumbnail %}
+                {% include "streams/parts/yt_link.html" with link=object.live_video %}
             </div>
         {% endif %}
-        {% if object.archive_yt_ref %}
+        {% if object.archive_videos.all.count > 0 %}
             <div class="col-md-3">
                 <h3>Archive link</h3>
-                {% include "streams/parts/yt_link.html" with ref=object.archive_yt_ref text=object.archive_title image=object.archive_thumbnail %}
+                {% for archive_link in object.archive_videos.all %}
+                    {% include "streams/parts/yt_link.html" with link=archive_link %}
+                {% endfor %}
             </div>
         {% endif %}
         </div>
-        {% if not object.live_yt_ref and not object.archive_yt_ref %}
+        {% if not object.live_video and object.archive_videos.all.count == 0 %}
             <div>No link found for this stream. This usually mean that they got removed (for live streams) or never got registered (for archive links).</div>
         {% endif %}
     </div>

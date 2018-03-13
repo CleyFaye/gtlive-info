@@ -23,23 +23,34 @@
         {% endif %}
         <div class="row streamRow">
             <div class="col-md-3 localtime" title="{{ stream.scheduled_date }}" data-aired="{{ stream.scheduled_date|date:"c" }}">loading…</div>
-            <div class="col-md-4 title"><a href="{{ stream.get_absolute_url }}">{% if stream.live_title %}{{ stream.live_title }}{% else %}{% if stream.archive_title %}{{ stream.archive_title }}{% else %}(no title){% endif %}{% endif %}</a></div>
+            <div class="col-md-4 title"><a href="{{ stream.get_absolute_url }}">{{ stream.display_title }}</a></div>
             <div class="col-md-3 game">
                 {% if stream.games.all.count > 1 %}
-                    (multiple)
+                    {% for game in stream.games.all %}
+                        {% if forloop.counter0 != 0 %}
+                        &nbsp;|&nbsp;
+                        {% endif %}
+                        {{ game }}
+                    {% endfor %}
                 {% else %}
                     {{ stream.games.all.0 }}
                 {% endif %}
             </div>
             <div class="col-md-2 links">
-                {% if stream.live_yt_ref %}
-                    {% include 'streams/parts/yt_link.html' with ref=stream.live_yt_ref text="Live" %}
+                {% if stream.live_video %}
+                    {% include 'streams/parts/yt_link.html' with link=stream.live_video textonly="Live" %}
                 {% endif %}
-                {% if stream.live_yt_ref and stream.archive_yt_ref %}
-                    &nbsp;|&nbsp;
-                {% endif %}
-                {% if stream.archive_yt_ref %}
-                    {% include 'streams/parts/yt_link.html' with ref=stream.archive_yt_ref text="Archive" %}
+                {% if stream.archive_videos.all.count > 0 %}
+                    {% for archive_link in stream.archive_videos.all %}
+                        {% if forloop.counter0 == 0 %}
+                            {% if stream.live_video %}
+                                &nbsp;|&nbsp;
+                            {% endif %}
+                        {% else %}
+                            &nbsp;|&nbsp;
+                        {% endif %}
+                        {% include 'streams/parts/yt_link.html' with link=archive_link textonly="Archive" %}
+                    {% endfor %}
                 {% endif %}
             </div>
         </div>

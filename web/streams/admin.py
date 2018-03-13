@@ -6,6 +6,7 @@ from django.utils.translation import ugettext_lazy as _
 from .models import (
     Stream,
     Game,
+    YTLink,
 )
 
 
@@ -46,32 +47,42 @@ class GameAdmin(admin.ModelAdmin):
 
 class StreamAdmin(admin.ModelAdmin):
     list_display = ('scheduled_date',
-                    'live_title')
+                    'title')
     date_hierarchy = 'scheduled_date'
     fields = ('scheduled_date',
               'latepatness',
-              'live_yt_ref',
-              'archive_yt_ref',
+              'live_video',
+              'archive_videos',
               'trust_level',
               'source',
               'source_url',
               'square_art',
-              'games',
-              'live_title',
-              'live_thumbnail',
-              'duration',
-              'archive_title',
-              'archive_thumbnail')
-    filter_horizontal = ('games',)
+              'games')
+    filter_horizontal = ('games',
+                         'archive_videos')
     list_filter = ('games',)
     radio_fields = {'trust_level': admin.VERTICAL}
     save_on_top = True
     search_fields = ('source',
-                     'live_title',
-                     'archive_title')
+                     'live_video__title',
+                     'archive_videos__title')
+
+    def title(self, instance):
+        if instance.live_video:
+            return instance.live_video.title
+        if instance.archive_videos.exists():
+            return instance.archive_videos.all()[0].title
+        return '?'
+
+
+class YTLinkAdmin(admin.ModelAdmin):
+    list_display = ('video_id',
+                    'title')
 
 
 admin.site.register(Game,
                     GameAdmin)
 admin.site.register(Stream,
                     StreamAdmin)
+admin.site.register(YTLink,
+                    YTLinkAdmin)

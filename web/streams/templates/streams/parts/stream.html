@@ -20,16 +20,18 @@
         <div class="col-md-12 verticalList">
         {% endif %}
             <div class="row">
-            {% if stream.live_yt_ref %}
+            {% if stream.live_video %}
                 <div class="col-md-3">
                     <h3>Full stream link</h3>
-                    {% include 'streams/parts/yt_link.html' with ref=stream.live_yt_ref text=stream.live_title image=stream.live_thumbnail %}
+                    {% include 'streams/parts/yt_link.html' with link=stream.live_video %}
                 </div>
             {% endif %}
-            {% if stream.archive_yt_ref and previous %}
+            {% if previous and stream.archive_videos.all.count > 0 %}
                 <div class="col-md-3">
                     <h3>Archive video link</h3>
-                    {% include 'streams/parts/yt_link.html' with ref=stream.archive_yt_ref text=stream.archive_title image=stream.archive_thumbnail %}
+                    {% for archive_link in stream.archive_videos.all %}
+                        {% include 'streams/parts/yt_link.html' with link=archive_link %}
+                    {% endfor %}
                 </div>
             {% endif %}
             </div>

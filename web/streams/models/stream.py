@@ -4,11 +4,9 @@ from django.db import models
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 from utils import get_now
-from utils.youtube import (getSingleVideoResult,
-                           getThumbnailData)
 from .game import Game
-from streams.fields import (YoutubeVideoReferenceField,
-                            TrustLevelField)
+from .ytlink import YTLink
+from streams.fields import TrustLevelField
 
 
 class Stream(models.Model):
@@ -58,39 +56,17 @@ class Stream(models.Model):
         null=True,
         help_text=_('How much can this information be trusted.'),
     )
-    live_title = models.TextField(
-        _('Title of the stream when it ran live'),
+    live_video = models.ForeignKey(
+        YTLink,
         blank=True,
         null=True,
-        help_text=_('Title of the video when it was live on the Game Theorist '
-                    + 'channel.'),
+        help_text=_('Live video for this stream'),
     )
-    live_yt_ref = YoutubeVideoReferenceField(
-        _('Video reference of the live stream'),
-        help_text=_('The Youtube reference code for the live stream.'),
-    )
-    live_thumbnail = models.ImageField(
-        _('Thumbnail of the full video'),
+    archive_videos = models.ManyToManyField(
+        YTLink,
         blank=True,
-        null=True,
-        help_text=_('The thumbnail used on the full stream, on the main '
-                    + 'channel'),
-    )
-    archive_title = models.TextField(
-        _('Title of the video when uploaded to the archive channel'),
-        blank=True,
-        null=True,
-        help_text=_('Title of the video when uploaded to the GTLive channel.'),
-    )
-    archive_yt_ref = YoutubeVideoReferenceField(
-        _('Video reference of the archive version'),
-        help_text=_('The Youtube reference code for the archive video.'),
-    )
-    archive_thumbnail = models.ImageField(
-        _('Thumbnail of the archive video'),
-        blank=True,
-        null=True,
-        help_text=_('The thumbnail used on the archive video'),
+        related_name='archive',
+        help_text=_('(list of) archive video from this stream'),
     )
     latepatness = models.IntegerField(
         _('How late was the stream'),
@@ -98,107 +74,24 @@ class Stream(models.Model):
         null=True,
         help_text=_('How late was the stream (in minutes)'),
     )
-    duration = models.IntegerField(
-        _('Stream duration'),
-        blank=True,
-        null=True,
-        help_text=_('Stream duration (in minutes)'),
-    )
     games = models.ManyToManyField(
         Game,
         blank=True,
         help_text=_('(list of) game played on the stream.'),
     )
 
-    def update_youtube_archiveref(self):
-        """Update metadata from youtube.
-
-        Returns
-        -------
-        bool
-            True if anything was changed, False otherwise
-
-
-        Notes
-        -----
-        See update_youtube() for details.
-        This function update the "archive" part of the stream.
-        """
-        any_change = False
-        if self.archive_yt_ref:
-            if ((not self.archive_title
-                 or not self.archive_thumbnail)):
-                videoDetails = getSingleVideoResult(self.archive_yt_ref)
-                if not self.archive_title and videoDetails['title']:
-                    self.archive_title = videoDetails['title']
-                    any_change = True
-                if not self.archive_thumbnail and videoDetails['thumbnail']:
-                    thumbnailImage = getThumbnailData(
-                        videoDetails['thumbnail'])
-                    if thumbnailImage:
-                        self.archive_thumbnail.save('thumbnail.jpg',
-                                                    thumbnailImage)
-                        any_change = True
-        return any_change
-
-    def update_youtube_liveref(self):
-        """Update metadata from youtube.
-
-        Returns
-        -------
-        bool
-            True if anything was changed, False otherwise
-
-
-        Notes
-        -----
-        See update_youtube() for details.
-        This function update the "live" part of the stream.
-        """
-        any_change = False
-        if self.live_yt_ref:
-            if ((not self.live_title
-                 or not self.live_thumbnail
-                 or not self.duration)):
-                videoDetails = getSingleVideoResult(self.live_yt_ref)
-                if not self.live_title and videoDetails['title']:
-                    self.live_title = videoDetails['title']
-                    any_change = True
-                if not self.live_thumbnail and videoDetails['thumbnail']:
-                    thumbnailImage = getThumbnailData(
-                        videoDetails['thumbnail'])
-                    if thumbnailImage:
-                        self.live_thumbnail.save('thumbnail.jpg',
-                                                 thumbnailImage)
-                        any_change = True
-                if not self.duration and videoDetails['duration']:
-                    self.duration = videoDetails['duration']
-                    any_change = True
-        return any_change
-
-    def update_youtube(self,
-                       no_save=False):
-        """Update metadata from youtube.
-
-        This will populate title, thumbnails and duration is possible, and if
-        they are initially empty.
-        If any change happens, the object is automatically saved unless no_save
-        is True.
-
-        When an object is created, this is called on first save.
-        """
-        if ((self.update_youtube_liveref()
-             or self.update_youtube_archiveref())):
-            if not no_save:
-                self.save()
-
-    def save(self, *args, **kwargs):
-        self.update_youtube(no_save=True)
-        super().save(*args,
-                     **kwargs)
-
     def get_absolute_url(self):
         return reverse('streams:details', kwargs={'pk': self.pk})
+
+    @property
+    def display_title(self):
+        if self.live_video and self.live_video.title:
+            return self.live_video.title
+        if self.archive_videos.all().exists():
+            archive_title = self.archive_videos.all()[0].title
+            if archive_title:
+                return archive_title
+        return '(no title)'
 
     @property
     def next_stream(self):
