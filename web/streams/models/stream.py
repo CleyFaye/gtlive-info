@@ -1,6 +1,7 @@
 """Stream details"""
 from datetime import timedelta
 from django.db import models
+from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 from utils import get_now
 from utils.youtube import (getSingleVideoResult,
@@ -109,36 +110,95 @@ class Stream(models.Model):
         help_text=_('(list of) game played on the stream.'),
     )
 
-    def save(self, *args, **kwargs):
-        if self.live_yt_ref:
-            if ((not self.live_title
-                 or not self.live_thumbnail
-                 or not self.duration)):
-                videoDetails = getSingleVideoResult(self.live_yt_ref)
-                if not self.live_title:
-                    self.live_title = videoDetails['title']
-                if not self.live_thumbnail:
-                    thumbnailImage = getThumbnailData(
-                        videoDetails['thumbnail'])
-                    if thumbnailImage:
-                        self.live_thumbnail.save('thumbnail.jpg',
-                                                 thumbnailImage)
-                if not self.duration:
-                    self.duration = videoDetails['duration']
+    def update_youtube_archiveref(self):
+        """Update metadata from youtube.
+
+        Returns
+        -------
+        bool
+            True if anything was changed, False otherwise
+
+
+        Notes
+        -----
+        See update_youtube() for details.
+        This function update the "archive" part of the stream.
+        """
+        any_change = False
         if self.archive_yt_ref:
             if ((not self.archive_title
                  or not self.archive_thumbnail)):
                 videoDetails = getSingleVideoResult(self.archive_yt_ref)
-                if not self.archive_title:
+                if not self.archive_title and videoDetails['title']:
                     self.archive_title = videoDetails['title']
-                if not self.archive_thumbnail:
+                    any_change = True
+                if not self.archive_thumbnail and videoDetails['thumbnail']:
                     thumbnailImage = getThumbnailData(
                         videoDetails['thumbnail'])
                     if thumbnailImage:
                         self.archive_thumbnail.save('thumbnail.jpg',
                                                     thumbnailImage)
+                        any_change = True
+        return any_change
+
+    def update_youtube_liveref(self):
+        """Update metadata from youtube.
+
+        Returns
+        -------
+        bool
+            True if anything was changed, False otherwise
+
+
+        Notes
+        -----
+        See update_youtube() for details.
+        This function update the "live" part of the stream.
+        """
+        any_change = False
+        if self.live_yt_ref:
+            if ((not self.live_title
+                 or not self.live_thumbnail
+                 or not self.duration)):
+                videoDetails = getSingleVideoResult(self.live_yt_ref)
+                if not self.live_title and videoDetails['title']:
+                    self.live_title = videoDetails['title']
+                    any_change = True
+                if not self.live_thumbnail and videoDetails['thumbnail']:
+                    thumbnailImage = getThumbnailData(
+                        videoDetails['thumbnail'])
+                    if thumbnailImage:
+                        self.live_thumbnail.save('thumbnail.jpg',
+                                                 thumbnailImage)
+                        any_change = True
+                if not self.duration and videoDetails['duration']:
+                    self.duration = videoDetails['duration']
+                    any_change = True
+        return any_change
+
+    def update_youtube(self,
+                       no_save=False):
+        """Update metadata from youtube.
+
+        This will populate title, thumbnails and duration is possible, and if
+        they are initially empty.
+        If any change happens, the object is automatically saved unless no_save
+        is True.
+
+        When an object is created, this is called on first save.
+        """
+        if ((self.update_youtube_liveref()
+             or self.update_youtube_archiveref())):
+            if not no_save:
+                self.save()
+
+    def save(self, *args, **kwargs):
+        self.update_youtube(no_save=True)
         super().save(*args,
                      **kwargs)
+
+    def get_absolute_url(self):
+        return reverse('streams:details', kwargs={'pk': self.pk})
 
     @property
     def next_stream(self):

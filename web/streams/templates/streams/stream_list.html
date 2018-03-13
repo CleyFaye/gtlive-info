@@ -23,7 +23,7 @@
         {% endif %}
         <div class="row streamRow">
             <div class="col-md-3 localtime" title="{{ stream.scheduled_date }}" data-aired="{{ stream.scheduled_date|date:"c" }}">loading…</div>
-            <div class="col-md-4 title"><a href="{% url 'streams:details' pk=stream.pk %}">{% if stream.live_title %}{{ stream.live_title }}{% else %}{% if stream.archive_title %}{{ stream.archive_title }}{% else %}(no title){% endif %}{% endif %}</a></div>
+            <div class="col-md-4 title"><a href="{{ stream.get_absolute_url }}">{% if stream.live_title %}{{ stream.live_title }}{% else %}{% if stream.archive_title %}{{ stream.archive_title }}{% else %}(no title){% endif %}{% endif %}</a></div>
             <div class="col-md-3 game">
                 {% if stream.games.all.count > 1 %}
                     (multiple)

@@ -8,12 +8,15 @@
 <nav aria-label="Navigate the streams archive">
     <ul class="pager">
         {% if object.previous_stream %}
-            <li class="previous"><a href="{% url "streams:details" pk=object.previous_stream.pk %}">Previous</a></li>
+            <li class="previous"><a href="{{ object.previous_stream.get_absolute_url }}">Previous</a></li>
         {% else %}
             <li class="previous disabled"><a href="#">Previous</a></li>
         {% endif %}
+        {% if perms.streams.change_stream %}
+            <li><a href="{% url "admin:streams_stream_change" object.pk %}">Edit</a></li>
+        {% endif %}
         {% if object.next_stream %}
-            <li class="next"><a href="{% url "streams:details" pk=object.next_stream.pk %}">Next</a></li>
+            <li class="next"><a href="{{ object.next_stream.get_absolute_url }}">Next</a></li>
         {% else %}
             <li class="next disabled"><a href="#">Next</a></li>
         {% endif %}

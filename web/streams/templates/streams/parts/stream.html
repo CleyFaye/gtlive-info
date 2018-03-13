@@ -61,7 +61,7 @@
             {% endif %}
             {% if previous %}
                 <div>
-                    <a href="{% url "streams:details" pk=stream.pk %}">Go to this stream details</a>
+                    <a href="{{ stream.get_absolute_url }}">Go to this stream details</a>
                 </div>
             {% endif %}
         </div>
