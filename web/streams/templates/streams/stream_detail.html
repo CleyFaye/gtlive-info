@@ -45,7 +45,7 @@
             <h2>Stream statistics</h2>
             {% if object.latepatness is not None %}
             <div>
-                <h3>Latepat-ness</h3> <span>{{ object.latepatness|humanDuration }}</span>
+                <h3>Latepat-ness (minutes)</h3> <span>{{ object.latepatness }}</span>
             </div>
             {% endif %}
             {% if object.live_video.duration %}
